@@ -1,3 +1,4 @@
+// Import necessary dependencies and components
 import { useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -18,8 +19,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-      <Header />
-      <Content />
+        <Header />
+        <Content />
       </main>
     </>
   );
@@ -35,7 +36,7 @@ const Content: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   const { data: topics, refetch: refetchTopics } = api.topic.getAll.useQuery(
-    undefined, // no input
+    undefined,
     {
       enabled: sessionData?.user !== undefined,
       onSuccess: (data) => {
@@ -111,6 +112,14 @@ const Content: React.FC = () => {
               <NoteCard
                 note={note}
                 onDelete={() => void deleteNote.mutate({ id: note.id })}
+                onUpdate={(updatedNote: Note) => {
+                  console.log('Updating note:', updatedNote);
+                  updatedNote?.mutate?.({
+                    id: note.id,
+                    title: updatedNote.title,
+                    content: updatedNote.content,
+                  });
+                }}    
               />
             </div>
           ))}

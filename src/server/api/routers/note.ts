@@ -27,6 +27,20 @@ export const noteRouter = createTRPCRouter({
       });
     }),
 
+    update: protectedProcedure
+    .input(z.object({ id: z.string(), title: z.string(), content: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.note.update({
+        where: {
+          id: input.id,  
+        },
+        data: {
+          title: input.title,
+          content: input.content,
+        },
+      });
+    }),
+    
   getAll: protectedProcedure
     .input(z.object({ topicId: z.string() }))
     .query(({ ctx, input }) => {
